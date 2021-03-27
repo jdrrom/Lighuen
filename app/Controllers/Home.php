@@ -38,4 +38,22 @@ class Home extends BaseController
         ];
         return view('testView',$data);
     }
+
+    public function todo(){
+	    $url ="http://csgobackpack.net/api/GetItemsList/v2/?no_details=1&currency=ARS";
+        $client = Services::curlrequest();
+        $response = $client->request('GET', $url);
+        $respuesta = json_decode($response->getBody(),true)["items_list"];
+        $arrayFiltrado = [];
+        foreach ($respuesta as $item){
+            if(isset($item["price"])){
+                $item["url"]=rawurlencode($item["name"]);
+                array_push($arrayFiltrado,$item);
+            }
+        }
+
+
+        return json_encode($arrayFiltrado);
+    }
+
 }
