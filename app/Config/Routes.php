@@ -35,6 +35,7 @@ $routes->setAutoRoute(true);
 $routes->get('/', 'Home::index');
 $routes->get('/test', 'Home::test');
 $routes->get('/todo', 'Home::todo');
+$routes->get('/traerItems', 'Home::traerItems');
 
 /*
  * --------------------------------------------------------------------
