@@ -17,21 +17,28 @@ class Home extends BaseController
         $urlParameters = "&time=7&icon=1";
         $client = Services::curlrequest();
         $array = [];
+        $falsos = [];
 
         foreach ($items as $item){
-            $response = $client->request('GET', $urlBase.$item.$urlParameters);
+            $response = $client->request('GET', $urlBase.rawurlencode($item).$urlParameters);
             $respuesta = json_decode($response->getBody(),true);
 
-            if(isset($respuesta["icon"]) && $respuesta["icon"]!=""){
+            $respuesta["name"]=$item;
+            if($respuesta["success"]=="true"){
                 array_push($array,$respuesta);
+            }
+            else{
+                array_push($falsos,$respuesta);
             }
         }
 
         $data = [
             "response" => $array,
+            "falsos" => $falsos,
 
         ];
         return view('testView',$data);
+//        return json_encode($data);
     }
 
     public function todo(){
@@ -59,7 +66,7 @@ class Home extends BaseController
         $arrayFiltrado = [];
         foreach ($respuesta as $item){
             if(isset($item["price"])){
-                array_push($arrayFiltrado,rawurlencode($item["name"]));
+                array_push($arrayFiltrado,$item["name"]);
             }
         }
         $finalArray = [];
